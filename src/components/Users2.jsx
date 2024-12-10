@@ -1,10 +1,24 @@
-import React, { useState } from "react";
-import { useLoaderData } from "react-router-dom";
+import { useQuery } from "@tanstack/react-query";
+import React, { useEffect, useState } from "react";
 import Swal from "sweetalert2";
 
-const Users = () => {
-  const loadedUsers = useLoaderData();
-  const [users, setUsers] = useState(loadedUsers);
+const Users2 = () => {
+
+    const {isError,error,isPending,data:users}=useQuery({
+        queryKey:"users",
+        queryFn:async()=>{
+           const res=await fetch('https://coffee-store-server-dusky-gamma.vercel.app/users')
+           return res.json()
+        }
+    })
+
+
+//   const [users, setUsers] = useState([]);
+//   useEffect(()=>{
+//     fetch('https://coffee-store-server-dusky-gamma.vercel.app/users')
+//     .then(res=>res.json())
+//     .then(data=>setUsers(data))
+//   },[])
 
   const handleUserDelete = (id) => {
     Swal.fire({
@@ -38,9 +52,16 @@ const Users = () => {
       }
     });
   };
+
+  if(isPending){
+    return <span className="loading loading-spinner text-primary"></span>
+  }
+  if(isError){
+    return <p>{error.message}</p>
+  }
   return (
     <div>
-      Users {users.length}
+      Users {users?.length}
       <div className="overflow-x-auto">
         <table className="table">
           {/* head */}
@@ -80,4 +101,4 @@ const Users = () => {
   );
 };
 
-export default Users;
+export default Users2;

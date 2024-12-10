@@ -1,5 +1,6 @@
 import React, { useContext } from 'react';
 import { authContex } from '../Routes/AuthProvider';
+import axios from 'axios';
 
 const SignIn = () => {
   const {UserLogin}=useContext(authContex)
@@ -13,17 +14,29 @@ const SignIn = () => {
           console.log(result.user);
           const lastSignInTime=result?.user?.metadata?.lastSignInTime
           const newUser={email,lastSignInTime}
-          fetch('http://localhost:5000/users',{
-            method:'PATCH',
-            headers:{
-              'content-type':'application/json'
-            },
-            body:JSON.stringify(newUser)
-          })
-          .then(res=>res.json())
+          // usign axios
+
+          axios.patch('https://coffee-store-server-dusky-gamma.vercel.app/users',newUser)
           .then(data=>{
-            console.log(data);
+            console.log(data.data);
           })
+
+
+
+          // using fetch
+
+
+          // fetch('https://coffee-store-server-dusky-gamma.vercel.app/users',{
+          //   method:'PATCH',
+          //   headers:{
+          //     'content-type':'application/json'
+          //   },
+          //   body:JSON.stringify(newUser)
+          // })
+          // .then(res=>res.json())
+          // .then(data=>{
+          //   console.log(data);
+          // })
 
         })
         .catch(error=>{

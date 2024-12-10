@@ -1,6 +1,7 @@
 import React, { useContext } from "react";
 import { authContex } from "../Routes/AuthProvider";
 import Swal from "sweetalert2";
+import axios from "axios";
 
 const SignUp = () => {
   const {createUser}=useContext(authContex)
@@ -18,25 +19,35 @@ const SignUp = () => {
 
       
       const newUser={name,email,createdAt}
-      fetch('http://localhost:5000/users',{
-        method:'POST',
-        headers:{
-          'content-type':'application/json',
-        },
-        body:JSON.stringify(newUser)
-      })
-      .then(res=>res.json())
+// axios
+
+      axios.post('https://coffee-store-server-dusky-gamma.vercel.app/users',newUser)
       .then(data=>{
-        console.log(data);
-       if(data.insertedId){
-        Swal.fire({
-          title: 'Success!',
-          text: 'successfully sign up',
-          icon: 'success',
-          confirmButtonText: 'Ok'
-      });
-       }
+        console.log(data.data);
       })
+
+
+      // normal fetch
+
+    //   fetch('https://coffee-store-server-dusky-gamma.vercel.app/users',{
+    //     method:'POST',
+    //     headers:{
+    //       'content-type':'application/json',
+    //     },
+    //     body:JSON.stringify(newUser)
+    //   })
+    //   .then(res=>res.json())
+    //   .then(data=>{
+    //     console.log(data);
+    //    if(data.insertedId){
+    //     Swal.fire({
+    //       title: 'Success!',
+    //       text: 'successfully sign up',
+    //       icon: 'success',
+    //       confirmButtonText: 'Ok'
+    //   });
+    //    }
+    //   })
     })
     .catch(error=>{
       console.log('ERROR',error.message);
